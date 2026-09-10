@@ -1,6 +1,7 @@
 package com.smartpantry.manager;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.InputType;
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
 
         fabAddItem.setOnClickListener(v -> showAddEditDialog(null));
 
+        setupBottomNavigation();
         loadPantryItems();
     }
 
@@ -51,6 +54,28 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
     protected void onResume() {
         super.onResume();
         loadPantryItems();
+    }
+
+    private void setupBottomNavigation() {
+        BottomNavigationView bottomNav = findViewById(R.id.bottomNavigation);
+        bottomNav.setSelectedItemId(R.id.nav_pantry);
+        bottomNav.setOnItemSelectedListener(item -> {
+            int id = item.getItemId();
+            if (id == R.id.nav_pantry) {
+                return true;
+            } else if (id == R.id.nav_suggested) {
+                startActivity(new Intent(this, SuggestedRecipesActivity.class));
+                overridePendingTransition(0, 0);
+                finish();
+                return true;
+            } else if (id == R.id.nav_settings) {
+                startActivity(new Intent(this, SettingsActivity.class));
+                overridePendingTransition(0, 0);
+                finish();
+                return true;
+            }
+            return false;
+        });
     }
 
     private void loadPantryItems() {
