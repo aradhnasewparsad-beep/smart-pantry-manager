@@ -2,4 +2,15 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Smart Pantry Manager palette: warm green + orange, food/fresh theme -->
+    <color name="pantry_green_dark">#2E5339</color>
+    <color name="pantry_green">#4C7A57</color>
+    <color name="pantry_green_light">#A8C9AF</color>
+    <color name="pantry_orange">#E07A34</color>
+    <color name="pantry_orange_dark">#B85E22</color>
+    <color name="pantry_cream">#FBF6EE</color>
+    <color name="pantry_text_dark">#2B2B2B</color>
+    <color name="pantry_text_muted">#6B6B6B</color>
+    <color name="pantry_surface_variant">#E8E2D0</color>
 </resources>
