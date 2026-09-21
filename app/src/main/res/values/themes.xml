@@ -9,6 +9,8 @@
         <item name="colorSecondaryVariant">@color/pantry_orange_dark</item>
         <item name="colorOnSecondary">@color/white</item>
 
+        <item name="colorSecondaryContainer">@color/pantry_green_light</item>
+
         <item name="android:colorBackground">@color/pantry_cream</item>
         <item name="colorSurface">@color/white</item>
         <item name="colorOnSurface">@color/pantry_text_dark</item>
