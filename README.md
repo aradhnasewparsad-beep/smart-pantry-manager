@@ -25,7 +25,7 @@ All pantry data and the recipe collection persist across app restarts, and are c
 
 ## Setup & Run Instructions
 
-1. Clone this repository: git clone https://github.com/aradhnasewparsad-beep/smart-pantry-manager.git
+1. Clone this repository: 
 2. Open the project in **Android Studio** (File → Open, then select the cloned folder).
 3. Let Gradle sync finish automatically (this may take a minute the first time).
 4. Create or select an emulator via **Device Manager** (e.g. Pixel 6, API 34), or connect a physical Android device with USB debugging enabled.
