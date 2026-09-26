@@ -3,13 +3,13 @@ package com.smartpantry.manager;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -119,6 +119,12 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
         etExpiry.setHint("Expiry date (optional, e.g. 2026-09-15)");
         layout.addView(etExpiry);
 
+        TextView tvError = new TextView(this);
+        tvError.setTextColor(Color.parseColor("#D32F2F"));
+        tvError.setPadding(0, 24, 0, 0);
+        tvError.setVisibility(View.GONE);
+        layout.addView(tvError);
+
         if (existingItem != null) {
             etName.setText(existingItem.getName());
             etQuantity.setText(String.valueOf(existingItem.getQuantity()));
@@ -128,37 +134,47 @@ public class MainActivity extends AppCompatActivity implements PantryAdapter.OnI
 
         String title = existingItem == null ? "Add Pantry Item" : "Edit Pantry Item";
 
-        new AlertDialog.Builder(this)
+        AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setView(layout)
-                .setPositiveButton("Save", (dialog, which) -> {
-                    String name = etName.getText().toString().trim();
-                    String quantityStr = etQuantity.getText().toString().trim();
-                    String unit = etUnit.getText().toString().trim();
-                    String expiry = etExpiry.getText().toString().trim();
-
-                    if (name.isEmpty() || quantityStr.isEmpty()) {
-                        Toast.makeText(this, "Name and quantity are required", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    double quantity;
-                    try {
-                        quantity = Double.parseDouble(quantityStr);
-                    } catch (NumberFormatException e) {
-                        Toast.makeText(this, "Quantity must be a number", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-
-                    if (existingItem == null) {
-                        dbHelper.addPantryItem(name, quantity, unit, expiry);
-                    } else {
-                        dbHelper.updatePantryItem(existingItem.getId(), name, quantity, unit, expiry);
-                    }
-                    loadPantryItems();
-                })
+                .setPositiveButton("Save", null)
                 .setNegativeButton("Cancel", null)
-                .show();
+                .create();
+
+        dialog.setOnShowListener(dialogInterface -> {
+            android.widget.Button saveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            saveButton.setOnClickListener(v -> {
+                String name = etName.getText().toString().trim();
+                String quantityStr = etQuantity.getText().toString().trim();
+                String unit = etUnit.getText().toString().trim();
+                String expiry = etExpiry.getText().toString().trim();
+
+                if (name.isEmpty() || quantityStr.isEmpty()) {
+                    tvError.setText("Name and quantity are required");
+                    tvError.setVisibility(View.VISIBLE);
+                    return;
+                }
+
+                double quantity;
+                try {
+                    quantity = Double.parseDouble(quantityStr);
+                } catch (NumberFormatException e) {
+                    tvError.setText("Quantity must be a number");
+                    tvError.setVisibility(View.VISIBLE);
+                    return;
+                }
+
+                if (existingItem == null) {
+                    dbHelper.addPantryItem(name, quantity, unit, expiry);
+                } else {
+                    dbHelper.updatePantryItem(existingItem.getId(), name, quantity, unit, expiry);
+                }
+                loadPantryItems();
+                dialog.dismiss();
+            });
+        });
+
+        dialog.show();
     }
 
     @Override
